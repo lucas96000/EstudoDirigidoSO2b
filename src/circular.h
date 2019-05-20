@@ -28,9 +28,8 @@ class Circular: public Escalonador{
 			
 			while(processos.size() > 0){
 				for(int i = 0; i < Escalonador::getContador(); ++i){
-					if(Escalonador::getProcesso(i)->getTempoC() == timeline){
-											
-						if(q != 0){
+					if(Escalonador::getProcesso(i)->getTempoC() == timeline){				
+						if(q >= 0 && q < 2){
 							fila.push_back(Escalonador::getProcesso(i)->getID());
 						}
 						else{
@@ -47,28 +46,34 @@ class Circular: public Escalonador{
 						}							
 					}							
 				}					
-							
-				//Executa o processo	
-				cout << timeline << " -> " << fila.front() << endl;				
-
-				if(processos.find(fila.front())->second > 1){				
-					processos[fila.front()] = processos.find(fila.front())->second - 1;			
-					q++;					
-				}
-				//processo finalizado
-				else{
-					processos.erase(fila.front());
-					fila.pop_front();
-					q = 0;
-				}			
-				
-				if(q == 2){
-					string aux = fila.front();						
-					fila.pop_front();
 					
-					fila.push_back(aux);
-					q = 0;
-				}
+					
+				if(fila.size() == 0){
+					cout << timeline << " -> --" << endl;
+				}			
+				else{
+					//Executa o processo	
+					cout << timeline << " -> " << fila.front() << endl;				
+	
+					if(processos.find(fila.front())->second > 1){				
+						processos[fila.front()] = processos.find(fila.front())->second - 1;			
+						q++;					
+					}
+					//processo finalizado
+					else{
+						processos.erase(fila.front());
+						fila.pop_front();
+						q = 0;
+					}			
+					
+					if(q == 2){
+						string aux = fila.front();						
+						fila.pop_front();
+						
+						fila.push_back(aux);
+						q = 0;
+					}
+				}			
 								
 				timeline++;
 			}
