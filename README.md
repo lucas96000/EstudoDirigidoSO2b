@@ -1,2 +1,4 @@
 # EstudoDirigidoSO2b
-Escalonador de processos Circular
+Process scheduling round robin
+
+Author: Lucas Ferreira 20/05/2019
