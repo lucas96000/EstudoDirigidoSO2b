@@ -90,6 +90,8 @@ class Circular: public Escalonador{
 					}
 				}			
 								
+				//(tempo final - tempo chegada - tempo de processo)
+				
 				timeline++;
 			}
 		}
