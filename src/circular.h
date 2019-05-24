@@ -13,6 +13,12 @@ class Circular: public Escalonador{
 		
 		virtual ~Circular(){
 		}
+	
+		/*void calculaTempoMedioProcesso(){
+			int tempoMedio;
+		
+			//(tempo final - tempo chegada - tempo de processo)
+		}*/
 		
 		void execute(){
 			int timeline = 0, q = 0;
@@ -21,6 +27,11 @@ class Circular: public Escalonador{
 			// 1- string processoID
 			// 2- int tempo de processo 
 			map<string, int> processos;
+			
+			// Map parametros
+			// 1- string processoID
+			// 2- int tempo final do processo
+			map<string, int> processosTF;
 			
 			// DequeAkaPilha
 			// 1 - string processoID
@@ -88,9 +99,7 @@ class Circular: public Escalonador{
 						pilha.push_back(aux);
 						q = 0;
 					}
-				}			
-								
-				//(tempo final - tempo chegada - tempo de processo)
+				}				
 				
 				timeline++;
 			}
