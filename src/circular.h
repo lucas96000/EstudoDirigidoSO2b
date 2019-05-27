@@ -43,7 +43,7 @@ class Circular: public Escalonador{
 			// 2- int tempo final do processo
 			map<string, int> processosTF;
 			
-			// DequeAkaPilha
+			// PilhaAkaDeque
 			// 1 - string processoID
 			deque<string> pilha;
 			
