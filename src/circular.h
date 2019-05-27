@@ -8,17 +8,27 @@
 
 class Circular: public Escalonador{
 	public:
+		// Construtor
 		Circular(){
 		}
 		
 		virtual ~Circular(){
 		}
 	
-		/*void calculaTempoMedioProcesso(){
-			int tempoMedio;
+		/*
+		* Parametro: TF -> tempo final
+		*/
+		void calculaTempoMedioProcesso(map<string, int> TF){
+			int tempoMedio = 0;
 		
-			//(tempo final - tempo chegada - tempo de processo)
-		}*/
+			for(int i = 0; i < Escalonador::getContador(); i++){
+				tempoMedio += TF[Escalonador::getProcesso(i)->getID()] -  Escalonador::getProcesso(i)->getTempoC() - Escalonador::getProcesso(i)->getTempoCPU();
+			}
+			
+			tempoMedio = Escalonador::getContador();
+			
+			cout << "\n\nTempo de espera medio de processo -> " << tempoMedio << endl;
+		}
 		
 		void execute(){
 			int timeline = 0, q = 0;
@@ -66,7 +76,7 @@ class Circular: public Escalonador{
 								pilha.pop_back();							
 								
 								pilha.push_back(Escalonador::getProcesso(i)->getID());
-								pilha.push_back(_aux);
+								pilha.push_back(_aux);								
 							} 							
 						}							
 					}							
@@ -86,7 +96,10 @@ class Circular: public Escalonador{
 					}
 					//processo finalizado
 					else{
-						processos.erase(pilha.front());
+						// Guarda o tempo final
+						processosTF[pilha.front()] = timeline;						
+						processos.erase(pilha.front());		
+														
 						pilha.pop_front();
 						q = 0;
 					}			
@@ -103,6 +116,8 @@ class Circular: public Escalonador{
 				
 				timeline++;
 			}
+			
+			calculaTempoMedioProcesso(processosTF);
 		}
 };
 
