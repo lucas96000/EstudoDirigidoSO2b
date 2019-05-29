@@ -19,7 +19,7 @@ class Circular: public Escalonador{
 		* Parametro: TF -> tempo final
 		*/
 		void calculaTempoMedioProcesso(map<string, int> TF){
-			int tempoMedio = 0;
+			float tempoMedio = 0;
 		
 			for(int i = 0; i < Escalonador::getContador(); i++){
 				tempoMedio += TF[Escalonador::getProcesso(i)->getID()] -  Escalonador::getProcesso(i)->getTempoC() - Escalonador::getProcesso(i)->getTempoCPU();
