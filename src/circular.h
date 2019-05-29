@@ -25,7 +25,7 @@ class Circular: public Escalonador{
 				tempoMedio += TF[Escalonador::getProcesso(i)->getID()] -  Escalonador::getProcesso(i)->getTempoC() - Escalonador::getProcesso(i)->getTempoCPU();
 			}
 			
-			tempoMedio = Escalonador::getContador();
+			tempoMedio = tempoMedio / Escalonador::getContador();
 			
 			cout << "\n\nTempo de espera medio de processo -> " << tempoMedio << endl;
 		}
