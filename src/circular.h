@@ -17,12 +17,21 @@ class Circular: public Escalonador{
 	
 		/*
 		* Parametro: TF -> tempo final
+		*
+		* O tempo final de cada processo eh inserido no processosTF, 
+		* assim tornando possivel o calculo de tempo medio.
 		*/
 		void calculaTempoMedioProcesso(map<string, int> TF){
 			float tempoMedio = 0;
 		
 			for(int i = 0; i < Escalonador::getContador(); i++){
-				tempoMedio += TF[Escalonador::getProcesso(i)->getID()] -  Escalonador::getProcesso(i)->getTempoC() - Escalonador::getProcesso(i)->getTempoCPU();
+				cout << "\nProcessoID       -> " << Escalonador::getProcesso(i)->getID() << endl;
+
+				cout << "Tempo Final      -> " << TF[Escalonador::getProcesso(i)->getID()] << endl;
+				cout << "Tempo de Chegada -> " << Escalonador::getProcesso(i)->getTempoC() << endl;
+				cout << "Tempo de CPU     -> " << Escalonador::getProcesso(i)->getTempoCPU() << endl;
+
+				tempoMedio += TF[Escalonador::getProcesso(i)->getID()] - Escalonador::getProcesso(i)->getTempoC() - Escalonador::getProcesso(i)->getTempoCPU();
 			}
 			
 			tempoMedio = tempoMedio / Escalonador::getContador();
@@ -32,6 +41,7 @@ class Circular: public Escalonador{
 		
 		void execute(){
 			int timeline = 0, q = 0;
+			bool delay_event = false;
 			
 			// Map parametros
 			// 1- string processoID
@@ -47,7 +57,11 @@ class Circular: public Escalonador{
 			// 1 - string processoID
 			deque<string> pilha;
 			
-			// Inseri os processos no map
+			/* 
+			* Inseri os processos no map, o mesmo eh utilizado para saber 
+			* quantos processos estão em pendencia. Assim que um processo é finalizado,
+			* ele eh retirado do map.
+			*/
 			for(int i = 0; i < Escalonador::getContador(); ++i){
 				processos[Escalonador::getProcesso(i)->getID()] = Escalonador::getProcesso(i)->getTempoCPU();				
 			}
@@ -64,59 +78,78 @@ class Circular: public Escalonador{
 						* que estava em execucao pilha.
 						*
 						*/
-						if(q >= 0 && q < QUANTUM){
+						if(!delay_event){
 							pilha.push_back(Escalonador::getProcesso(i)->getID());
 						}
 						else{
-							if(pilha.size() == 0){
-								pilha.push_back(Escalonador::getProcesso(i)->getID());
-							}
-							else{
-								string _aux = pilha.back();
-								pilha.pop_back();							
-								
-								pilha.push_back(Escalonador::getProcesso(i)->getID());
-								pilha.push_back(_aux);								
-							} 							
-						}							
+							string _aux = pilha.back();
+							pilha.pop_back();							
+							
+							pilha.push_back(Escalonador::getProcesso(i)->getID());
+							pilha.push_back(_aux);
+							// reinicializa para falso o evento
+							delay_event = false;
+						}						
 					}							
 				}					
-					
-					
+
+				/*
+				* Se nao houver processo na pilha, porem ha processos pendente(s)
+				* imprime um --
+				*/	
 				if(pilha.size() == 0){
 					cout << timeline << " -> --" << endl;
 				}			
 				else{
-					//Executa o processo	
+					//Executa uma parte do processo	
 					cout << timeline << " -> " << pilha.front() << endl;				
 	
-					if(processos.find(pilha.front())->second > 1){				
-						processos[pilha.front()] = processos.find(pilha.front())->second - 1;			
+					/*
+					* encontra o processo que esta na frente da pilha no map de processos
+					*/
+					if(processos.find(pilha.front())->second > 1){	
+						// decrementa o tempo de processo no map			
+						processos[pilha.front()] = processos.find(pilha.front())->second - 1;	
+						// incrementa o quantum		
 						q++;					
 					}
 					//processo finalizado
 					else{
 						// Guarda o tempo final
-						processosTF[pilha.front()] = timeline;						
-						processos.erase(pilha.front());		
-														
+						processosTF[pilha.front()] = timeline + 1;
+						// remove do map de processos						
+						processos.erase(pilha.front());	
+						// remove da pilha de pocessos								
 						pilha.pop_front();
+						// reinicializa o quantum
 						q = 0;
 					}			
 					
-					// QUANTUM
+					// se o quantum for atingido, o processo vai para o final da pilha
 					if(q == QUANTUM){
-						string aux = pilha.front();						
-						pilha.pop_front();
-						
+						// guarda a ID do processo
+						string aux = pilha.front();		
+						// remove da frente da pilha				
+						pilha.pop_front();						
+						// joga no final da pilha
 						pilha.push_back(aux);
+						// reinicializa o quantum
 						q = 0;
+
+						// Verifica se não ocorre o evento especial***
+						for(int i = 0; i < Escalonador::getContador(); ++i){
+							if(Escalonador::getProcesso(i)->getTempoC() == timeline+1){
+								delay_event = true;
+							}
+						}
 					}
 				}				
-				
+
+				// incrementa a timeline
 				timeline++;
 			}
-			
+
+			cout<<"\n";			
 			calculaTempoMedioProcesso(processosTF);
 		}
 };
