@@ -25,7 +25,7 @@ class Utils{
 			// Separa as linhas no vetor
 			CsvSeparaLinhas(filePath, Linhas, linhasQtd);
 			
-			// Realiza a separacao dos elementos e cria/insere na matriz
+			// Realiza a separacao dos elementos e transforma em processos
 			LinhasParaListaProcessos(Linhas, E, linhasQtd);
 		}
 		
@@ -68,7 +68,7 @@ class Utils{
 		//[Linhas]    -> Vetor de strings para aramazenar cada linha inteira
 		//[QtdLinhas] -> Quantidade de linhas no arquivo
 		static void CsvSeparaLinhas(char* filePath, char Linhas[][STR_MAX], int LinhasQtd){
-			// Lê o arquivo
+			// LÃª o arquivo
 			FILE * file = fopen(filePath,"r");
 			
 			if(file == NULL){ //Se nao encontrar o arquivo
@@ -83,7 +83,7 @@ class Utils{
 					// pega o char
 					char c = fgetc(file);
 		
-					// Verifica se não é o final do arquivo
+					// Verifica se nÃ£o Ã© o final do arquivo
 					if(c == EOF){
 						if(ferror(file)){
 						  perror("Nao foi possivel ler o arquivo");
@@ -93,7 +93,7 @@ class Utils{
 						continue;
 					}
 					
-					// Verifica se não é um '\n', se for vai para a próxima linha
+					// Verifica se nÃ£o Ã© um '\n', se for vai para a prÃ³xima linha
 					if(c == '\n'){
 						// Inseri o caractere nulo para finalizar a string
 						Linhas[i][j] = '\0';
@@ -106,7 +106,7 @@ class Utils{
 						j++;
 					}
 					
-					// Insere o caractere nulo na ultima linha, pois não um '\n' na ultima linha
+					// Insere o caractere nulo na ultima linha, pois nÃ£o um '\n' na ultima linha
 					Linhas[i][j+1] = '\0';
 				}
 		
@@ -117,8 +117,8 @@ class Utils{
 		//Pega o array de strings e transforma e uma Mtriz esparsa
 		//Parametros
 		//[Linhas] 		-> Vetor contendo cada linha do arquivo
-		//[A]      		-> Matriz Esparsa no qual será inseridos os elementos
-		//[LinhasQtd]   -> Quantidade de linhas no arquivo
+		//[E]      		-> Escalonador
+		//[LinhasQtd]   	-> Quantidade de linhas no arquivo
 		static void LinhasParaListaProcessos(char Linhas[][STR_MAX], Escalonador* E, int LinhasQtd){
 			int i, j, m, elementos, n_elementos;
 			
@@ -126,7 +126,7 @@ class Utils{
 			for(i = 0; i < LinhasQtd; ++i){
 				elementos = 1;
 				for(j = 0; j < strlen(Linhas[i]); ++j){	
-					// É utilizado o ponto e virgula pra saber quantos elementos contem na linha		
+					// Ã‰ utilizado o ponto e virgula pra saber quantos elementos contem na linha		
 					if(Linhas[i][j] == ';'){ 
 						elementos++;
 					}
