@@ -2,7 +2,6 @@
 #define _CIRCULAR_H_
 #include <map>
 #include <deque>
-#include <algorithm>
 
 #define QUANTUM 2
 
