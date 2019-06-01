@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 	Circular* c = new Circular();
 
 	Utils::Ler("arquivo/processos.txt", c);
-	
+
 	c->execute();
 
 	return 0;
