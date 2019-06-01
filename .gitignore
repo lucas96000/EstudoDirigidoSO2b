@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+.vscode/ipch/4277470fdfc63d83/MAIN.ipch
+.vscode/ipch/4277470fdfc63d83/mmap_address.bin
